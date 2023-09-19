@@ -56,9 +56,12 @@ app.get('/movies/:id', async (req, res) => {
 app.patch('/movies/:id', async (req, res) => {
   const { id } = req.params;
   const { title, description, rating, image } = req.body;
+
+  const updateTimestampe = new Date()
+  
   try {
-    const result = await db.query('UPDATE movies SET title = $1, description = $2, rating = $3, image = $4 WHERE id = $5 RETURNING *', 
-    [title, description, rating, image, id]);
+    const result = await db.query('UPDATE movies SET title = $1, description = $2, rating = $3, image = $4, updated_at = $5 WHERE id = $6 RETURNING *', 
+    [title, description, rating, image,updateTimestampe, id]);
     
     if (result.rows.length === 0) {
       res.status(404).json({ error: 'movies not found' });
